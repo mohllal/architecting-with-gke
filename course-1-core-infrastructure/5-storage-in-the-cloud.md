@@ -1,0 +1,36 @@
+# Module 5: Storage in the Cloud
+
+- What's object storage? *It's not the same as file storage*, in which you manage your data as a hierarchy of folders. *It's not the same as block storage*, in which your operating system manages your data as chunks of disk.
+- Object storage means that we save arbitrary bunch of bytes and storage lets us *address it with a unique key*. That's it. Often these unique keys are in the form of URLs which means object storage interacts nicely with Web technologies.
+- ***Google Cloud Storage*** a fully managed scalable service. That means that we don't need to provision capacity ahead of time. Just make objects and the service stores them with high durability and high availability.
+- Cloud Storage is comprised of ***buckets*** we create and configure and use to hold our storage objects. The storage objects are ***immutable***, which means that we do not edit them in place but instead we create ***new versions***.
+- Cloud Storage always ***encrypts data on the server*** side before it is written to disk. Also by default, ***data in-transit is encrypted using HTTPS***.
+- Cloud Storage files are organized into buckets. When we create a bucket, we give it a ***globally unique name***. We specify a geographic location where the bucket and its contents are stored and we choose a default storage class.
+- If ***object versioning*** is turned on on a bucket, *Cloud Storage keeps a history of modifications*. That is, it overrides or deletes all of the objects in the bucket.
+- Cloud Storage also offers ***lifecycle management policies*** which can be configured to for example tell Cloud Storage to delete objects older than 365 days.
+- Cloud Storage lets us choose among four different types of storage classes: ***Regional***, ***Multi-regional***, ***Nearline***, and ***Coldline***. Multi-regional and Regional are *high-performance object storage*, whereas Nearline and Coldline are *backup and archival storage*.
+- Regional storage lets us store our data *in a specific GCP region*: US Central one, Europe West one or Asia East one. It's cheaper than Multi-regional storage but it offers *less redundancy*. Multi-regional storage on the other hand, cost a bit more but it's *Geo-redundant*.
+- Multi-regional storage is appropriate for *storing frequently accessed data*. For example, website content, interactive workloads, or data that's part of mobile and gaming applications. People use regional storage on the other hand, to store data close to their Compute Engine, virtual machines, or their Kubernetes engine clusters. That gives better performance for data-intensive computations.
+- Nearline storage is a low-cost, highly durable service for storing infrequently accessed data.
+- Coldline storage is a very low cost, highly durable service for data archiving, online backup, and disaster recovery.
+- Availability of these storage classes varies with Multi-regional having the highest availability of 99.95% followed by Regional with 99.9% and Nearline and Coldline with 99% percent.
+- ***Cloud Bigtable*** is Google's NoSQL, big data database service. Databases in Bigtable are ***sparsely populated tables*** that can scale to billions of rows and thousands of columns allowing us to store petabytes of data.
+- Cloud Bigtable is ideal for storing large amounts of data with very low latency. It supports high throughput, both read and write, so it's a great choice for both operational and analytical applications including Internet of Things, user analytics and financial data analysis.
+- Cloud Bigtable is offered through the ***same open source API as HBase***, which is the native database for the Apache Hadoop project.
+- An important feature of relational database services that helps with the same goal - ***transactions***. Applications can designate a group of database changes *as all or nothing*. Either they all get made, or none do.
+- Cloud SQL offers both MySQL and PostgreSQL databases that are capable of handling terabytes of storage.
+- Cloud SQL backups data with *either on-demand or scheduled backups*.
+- Cloud SQL scales *both vertically by changing the machine type*, and *horizontally via read replicas*.
+- From a security perspective, Cloud SQL instances *include network firewalls*, and customer data is *encrypted when on Google's internal networks*, and when stored in database tables, temporary files, and backups.
+- ***Cloud Spanner*** offers *horizontal scaleability*. It offers transactional consistency at a global scale, schemas, SQL, and automatic synchronous replication for high availability.
+- ***Cloud Datastore*** automatically handles sharding and replication, providing a highly available and durable database that scales automatically to handle load. Unlike Cloud Bigtable, it also *offers transactions that affect multiple database rows*, and it has SQL-like queries.
+- Comparing Storage Options:
+  
+  |                 | Cloud Datestore                   | BigTable                                | Cloud Storage                                      | Cloud SQL                                | Cloud Spanner                     | BigQuery                                     |
+  | --------------- | --------------------------------- | --------------------------------------- | -------------------------------------------------- | ---------------------------------------- | --------------------------------- | -------------------------------------------- |
+  | Type            | NoSQL document                    | NoSQL wide cloumn                       | Blobstore                                          | Relational SQL                           | Relational SQL                    | Relational SQL                               |
+  | Transactions    | Yes                               | No                                      | No                                                 | Yes                                      | Yes                               | No                                           |
+  | Complex Queries | No                                | No                                      | No                                                 | Yes                                      | Yes                               | Yes                                          |
+  | Capacity        | Terabytes+                        | Petabytes+                              | Petabytes+                                         | Terabytes+                               | Petabytes+                        | Petabytes+                                   |
+  | Unit Size       | 1 MB/entity                       | ~10 MB/cell<br/>~100 MB/row             | 5 TB/object                                        | Determined by DB engine                  | 10,240 MiB/row                    | 10 MB/row                                    |
+  | Best For        | Semi-structured application data. | Flat data. Heavy read and write events. | Structured and unstructured binary or object data. | Structured data for applications usages. | Large scale database application. | Interactive querying, and offline analytics. |
