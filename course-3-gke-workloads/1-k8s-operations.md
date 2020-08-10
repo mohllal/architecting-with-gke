@@ -1,0 +1,27 @@
+# Module 1: Kubernetes Operations
+
+- `kubectl` is a utility used by administrators to control Kubernetes clusters. We use it to communicate with the ***kube-apiserver*** on the master.
+- `kubectl` *converts commands into an API call*. Which send it to the `kube-apiserver` through HTTPS on the cluster's *master server*. The `kube-apiserver` processes the request by *querying ETCD*. The `kube-apiserver` then returns the results to `kubectl` through HTTPS. Finally, `kubectl` interprets the API response and displays the results to the administrator at the command prompt.
+- `kubectl` stores its configuration in a file in `$HOME/.kube/config`. The configuration file contains a *list of clusters and the credentials attached to each of those clusters*. `kubectl config view` shows the configuration of the kubectl command itself.
+- The GCloud `gcloud containers cluster get credentials [CLUSTER_NAME] --zone [ZONE_NAME]` command writes configuration information into a config file in the `.kube` directory in the home directory by default.
+- In general, `kubectl` is a tool for *administrating the internal state of an existing cluster*. But `kubectl` can't create new clusters or change the shape of existing clusters.
+- `kubectl` command syntax is composed of several parts `kubectl [command] [type] [name] [flags]`. The ***command***, the ***type***, the ***name***, and optional ***flags***.
+- ***Command*** specifies the action we want to perform, such as `get`, `describe`, `logs`, or `exec`. Some commands show us information while others allow us to change the clusters configuration.
+- ***Type***, defines the Kubernetes object that the command acts upon. For example, we can specify ***pods***, ***deployments***, ***nodes*** or other objects including the cluster itself.
+- ***Name*** specifies the object defined in type. The name field isn't always needed, especially when we're using commands that lists or show us information.
+- Some commands support additional optional ***flags*** that we could include at the end of the command such as making a special requests like formatting the output in a certain way.
+- To retrieve a list of the objects using a command like `kubectl get [TYPE]` pods, which returns a list of all the pods in the cluster with their statuses.
+- To get detailed information on a specific pod, run the command `kubectl describe [RESOURCE_NAME]`.
+- To test and debug within the pod, use `kubectl exec [POD_NAME]` to execute commands and applications.
+- To view the logs, use `kubectl logs [NAME]` command which provides a powerful tool to see what's happening inside of a pod.
+- A pod's status provides a *high-level summary* of its life cycle, not the comprehensive details about a pod or its containers:
+  - ***Pending*** means a pod has been accepted by Kubernetes, but it's still being scheduled. This means that the container images are defined for the pod, but they *haven't been created by the container runtime*.
+  - ***Running*** means a pod is running when it has been successfully attached to a node and all it's containers have been created. Containers inside a pod could be starting, restarting, or running continuously.
+  - ***Succeeded*** means that all containers have finished running successfully. In other words, they've terminated successfully and they won't be restarting.
+  - ***Failed*** means a container has terminated with a failure.
+  - ***Unknown*** is where the state of a pod simply cannot be retrieved. Probably because of a *communication error between the master and the kubelet*. It's not a commonly seen mistake.
+  - ***CrashLoopBackOff*** means that one of the containers in the pod *exited unexpectedly*, even after it was restarted at least once. This is a common error. Usually, CrashLoopBackOff means that the pod isn't configured correctly.
+- If a pod has more one container, use the `-c` argument to specify the specific container to attach into the pod on both `kubectl exec` or `kubectl logs`.
+- `kubectl config current-context` prints the current active kubectl context. `kubectl config get-contexts` prints out some details for all the cluster contexts in the kubeconfig file:
+- `kubectl top nodes` view the resource usage across the nodes of the cluster.
+- `kubectl cp [LOCAL_FILE_PATH] [POD_NAME]:[REMOTE_FILE_PATH]` pushes a file into a container.
